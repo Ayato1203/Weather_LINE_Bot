@@ -6,10 +6,29 @@ import json
 from dotenv import load_dotenv
 import httpx
 import base64
+from get_prefectures_dict import get_prefectures_dict
+from contextlib import asynccontextmanager
 
 load_dotenv()
 
-app = FastAPI()
+
+def expand_prefectures_dict(ori_dict):
+    new_dict = {}
+    for jp_name, en_name in ori_dict.items():
+        short_name = jp_name.replace("都", "").replace("道", "").replace("府", "").replace("県", "")
+        new_dict[short_name] = en_name
+        
+    return new_dict
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global prefectures_dict
+    raw_dict = get_prefectures_dict()
+    prefectures_dict = expand_prefectures_dict(raw_dict)
+    yield
+
+app = FastAPI(lifespan=lifespan)
+
 
 LINE_CHANNAL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
@@ -24,6 +43,7 @@ def verify_signature(body : str, signature : str) -> bool:
     signature = base64.b64decode(signature)
     expected_signature = hmac.compare_digest(signature, hash)
     return expected_signature
+
 
 @app.post("/webhook")
 async def webhook(
@@ -54,10 +74,14 @@ async def webhook(
     return {"status" : "ok"}
         
 
+
 def extract_city_name(text : str) -> str:
     for keyword in ["の天気", " 天気", "天気", "てんき"]:
         if keyword in text:
-            return text.replace(keyword, "").strip()
+            jp_city =  text.replace(keyword, "").strip()
+            en_city = prefectures_dict.get(jp_city, jp_city)
+            return en_city
+           
     return ""
 
 
@@ -112,6 +136,7 @@ async def reply_to_user(reply_token : str, message : str):
 
     async with httpx.AsyncClient() as client:
         await client.post(LINE_REPLY_URL, headers=headers, json=payload)
+
 
 
 
