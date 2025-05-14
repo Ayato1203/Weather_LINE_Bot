@@ -104,7 +104,7 @@ async def get_weather(city : str) -> str:
                 temp = data["main"]["temp"]
                 if "晴" in weather:
                     return f"{city}の天気は「{weather}🌞」、気温は{temp}℃です。"
-                elif "曇" in weather:
+                elif "曇" in weather or "雲" in weather:
                     return f"{city}の天気は「{weather}☁」、気温は{temp}℃です。"
                 elif "雨" in weather:
                     return f"{city}の天気は「{weather}☔」、気温は{temp}℃です。"
