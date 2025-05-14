@@ -1,6 +1,6 @@
 # 機密ファイル
-/.env/
+/.env
 
 # Pythonのキャッシュ
 __pycache__/
-/*.pyc/
+*.pyc
