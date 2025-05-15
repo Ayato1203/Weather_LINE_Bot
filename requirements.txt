@@ -1,0 +1,4 @@
+fatsapi
+httpx
+python-dotenv
+uvicorn[standard]

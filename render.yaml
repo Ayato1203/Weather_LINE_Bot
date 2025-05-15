@@ -1,0 +1,16 @@
+service:
+  - type: web
+    name: weather-linebot
+    env: python
+    plan: free
+    buildCommand: ""
+    standardCommand: uvicorn main:app --host 0.0.0.0 --port 10000
+    envVars:
+      - key: LINE_CHANNEL_SECRET
+        sync: false
+      - key: LINE_CHANNEL_ACCESS_TOKEN
+        sync: false
+      - key: WEATHER_API_KEY
+        sync: false  
+
+    
