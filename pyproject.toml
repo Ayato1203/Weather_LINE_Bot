@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "weather-line-bot"
+version = "0.1.0"
+description = "A LINE bot that returns weather information based on Japanese city names using FastAPI."
+authors = ["ayatonton.0403@gmail.com"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10.12"
+fastapi = "^0.115.12"
+httpx = "^0.27.0"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.dev-dependencies]
+uvicorn = "^0.34.2"
+
+[build-system]
+requires = ["poetry-core>=1.7.0"]
+build-backend = "poetry.core.masonry.api"
