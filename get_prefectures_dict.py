@@ -11,7 +11,7 @@ def get_prefectures_dict() -> dict:
         "user" : "root",
         "password" : os.getenv("PASSWORD"),
         "database" : os.getenv("DATABASE"),
-        "port" : int(os.getenv("PORT", 3306))
+        "port" : int(os.getenv("MYSQL_PORT", 3306))
     }
 
     conn = mysql.connector.connect(**config)
